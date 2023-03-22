@@ -47,6 +47,11 @@ class Posts:
         body = r.json()
         return status_code, body
 
+    def delete_post(self, post_id, auth):
+        r = requests.delete(self.url + self.email + "/post" + post_id, auth=auth)
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
 
 
 
