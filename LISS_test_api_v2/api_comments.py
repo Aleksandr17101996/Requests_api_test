@@ -17,5 +17,13 @@ class Comments:
         body = r.json()
         return status_code, body
 
+    def get_comments(self):
+        r = requests.get(self.url + self.email + "/comments")
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
+
+
+
 
 
