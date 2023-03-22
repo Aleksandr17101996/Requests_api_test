@@ -20,3 +20,16 @@ class Posts:
         status_code = r.status_code
         body = r.json()
         return status_code, body
+
+    def post_post(self, name, content, auth):
+        data = {
+            "name": name,
+            "content": content
+        }
+        r = requests.post(self.url + self.email + "/posts", auth=auth)
+        status_code = r.status_code
+        body = r.json()
+        assert status_code, body
+
+
+
