@@ -29,7 +29,14 @@ class Posts:
         r = requests.post(self.url + self.email + "/posts", auth=auth, json=data)
         status_code = r.status_code
         body = r.json()
-        assert status_code, body
+        return status_code, body
+
+    def get_post(self, post_id):
+        r = requests.get(self.url + self.email + "/post" + post_id)
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
+
 
 
 
