@@ -1,4 +1,4 @@
-from LIIS_test_api_v1.POSTS import Posts
+from LIIS_test_api_v1.posts_api import Posts
 from config import Base
 from requests.auth import HTTPBasicAuth
 
