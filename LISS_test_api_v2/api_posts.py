@@ -15,3 +15,8 @@ class Posts:
         body = r.json()
         assert status_code, body
 
+    def get_posts(self):
+        r = requests.get(self.url + self.email + "/posts")
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
