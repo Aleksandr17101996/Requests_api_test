@@ -26,7 +26,7 @@ class Posts:
             "name": name,
             "content": content
         }
-        r = requests.post(self.url + self.email + "/posts", auth=auth)
+        r = requests.post(self.url + self.email + "/posts", auth=auth, json=data)
         status_code = r.status_code
         body = r.json()
         assert status_code, body
