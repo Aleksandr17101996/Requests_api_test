@@ -32,10 +32,24 @@ class Posts:
         return status_code, body
 
     def get_post(self, post_id):
-        r = requests.get(self.url + self.email + "/post" + post_id)
+        r = requests.get(self.url + self.email + "/post/" + post_id)
         status_code = r.status_code
         body = r.json()
         return status_code, body
+
+    def put_post(self, post_id, name, content, auth):
+        data = {
+            "name": name,
+            "content": content
+        }
+        r = requests.put(self.url + self.email + "/post/" + post_id, auth=auth, json=data)
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
+
+
+
+
 
 
 
