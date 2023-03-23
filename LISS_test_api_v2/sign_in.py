@@ -7,6 +7,8 @@ class AddNewUser:
     email = Base.USER_EMAIL
 
     def sign_in_new_user(self, user_name, email, password, first_name, middle_name, last_name):
+        '''Метод '''
+
         data = {
             "username": user_name,
             "email": email,
