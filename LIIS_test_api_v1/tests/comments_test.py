@@ -32,7 +32,7 @@ class TestComments(Comments):
         assert status_code == 200, "Статус кода не соответсвует"
         assert "title" in body
 
-    def test_put_comment(self, ):
+    def test_put_comment(self):
         comment_id = self.test_get_comments()
         title = "Это обновленный заголовок комментария!"
         content = "Это обновленный текст комментария!"
@@ -40,3 +40,8 @@ class TestComments(Comments):
         assert status_code == 200, "Статус кода не соответсвует"
         assert body["message"] == "updated"
 
+    def test_delete_comment(self):
+        comment_id = self.test_get_comments()
+        status_code, headers = self.delete_comment(comment_id, self.auth_user)
+        assert status_code == 204, "Статус кода не соответсвует"
+        assert headers["Content-Type"] == "application/json"
