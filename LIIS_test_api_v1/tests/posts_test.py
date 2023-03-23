@@ -7,35 +7,58 @@ class TestPosts(Posts):
     auth_user = HTTPBasicAuth(Base.USER_NAME, Base.USER_PASSWORD)
 
     def test_get_posts(self):
+        """ Проверяем что  на запрос о получении данных о всех постах пользователя возвращается
+         не пустой список и статус кода 200, а так же возвращаем id последего поста.
+                В случае если список равен нулю, отправляем запрос на создание поста"""
+
         status_code, body = self.get_post()
-        last_id = body[-1]['id']
-        assert status_code == 200, "Статус кода не соответсвует"
-        assert len(body) >= 0, "Посты не найдены"
-        return str(last_id)
+        if len(body) == 0:
+            self.test_post_posts()
+            status_code, body = self.get_post()
+            assert status_code == 200, "Статус кода не соответсвует ожидаемому"
+            assert len(body) > 0, "В списке нет добавленных постов"
+            return str(body[-1]['id'])
+        else:
+            assert status_code == 200, "Статус кода не соответсвует ожидаемому"
+            assert len(body) > 0, "В списке нет добавленных постов"
+            return str(body[-1]['id'])
 
     def test_post_posts(self):
+        """ Проверяем что  при отправке запроса на сервер с авторизацией существующего польователя
+               о добавлении поста  возвращается статус кода 201, а так же заголовок и тело поста
+               идентичные с отправленными"""
+
         title = "Заголовок поста"
-        content = "Контент поста"
+        content = "Тело поста"
         status_code, body = self.post_posts(title, content, self.auth_user)
-        assert status_code == 201, "Статус кода не соответсвует"
-        assert body["title"] == title, "Заголовок поста в теле ответа не верен"
-        assert body["content"] == content, "Контент поста не верен"
+        assert status_code == 201, "Статус кода не соответсвует ожидаемому"
+        assert body["title"] == title, "Заголовок поста в теле ответа не идентичен отправленному"
+        assert body["content"] == content, "Тело поста в ответе не идентичен отправленному"
 
     def test_get_new_post(self):
+        """ Проверяем что  на запрос о получении данных о посте  пользователя найденого по id возвращается
+                 статус кода 200 и id поста в теле ответа идентичен с id по которому осуществлялся поиск"""
+
         post_id = self.test_get_posts()
         status_code, body = self.get_new_post(post_id)
-        assert status_code == 200, "Статус кода не соответсвует"
-        assert body["id"] == int(post_id), "Тело ответа имеет не верный id"
+        assert status_code == 200, "Статус кода не соответсвует ожидаемому"
+        assert body["id"] == int(post_id), "Тело ответа имеет id который не соответсвует ожидаемому"
 
     def test_put_post(self):
+        """ Проверяем что  на запрос о обнавление данных в посте пользователя, найденого по id поста, возвращается
+                         статус кода 200 и в теле ответа содержатся данные о успешном обновлении поста"""
+
         update_title = "Обновленный заголовок поста"
-        update_content = "Обновленный контент поста"
+        update_content = "Обновленное тело поста"
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
-        assert status_code == 200, "Статус кода не соответсвует"
-        assert body["message"] == "updated", "Содержимое заголовка не обновилось"
+        assert status_code == 200, "Статус кода не соответсвует ожидаемому"
+        assert body["message"] == "updated", "Содержимое поста не обновилось"
 
     def test_delete_post(self):
+        """ Проверяем что при отправке запроса на удаление поста найденного по id, возвращается статус кода 204"""
+
         post_id = self.test_get_posts()
         status_code = self.delete_post(post_id, self.auth_user)
-        assert status_code == 204, "Статус кода не соответсвует"
+        assert status_code == 204, "Статус кода не соответсвует ожидаемому"
+
