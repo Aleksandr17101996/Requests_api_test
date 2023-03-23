@@ -40,10 +40,7 @@ class Comments(Base):
         return status_code, body
 
     def delete_comment(self, id_comment, auth):
-        r = requests.delete(self.url + self.email + id_comment, auth=auth)
+        r = requests.delete(self.url + self.email + "/comment/" + id_comment, auth=auth)
         status_code = r.status_code
         headers = r.headers
         return status_code, headers
-
-
-
