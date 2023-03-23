@@ -6,7 +6,7 @@ class Posts(Base):
     url = Base.BASE_URL_V1
     email = Base.USER_EMAIL
 
-    """api библиотека для форума"""
+    """Библиотека api для работы с постами форума"""
 
     def get_post(self):
 
