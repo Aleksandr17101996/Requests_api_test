@@ -39,7 +39,17 @@ class Comments:
         body = r.json()
         return status_code, body
 
+    def get_comments_pagination(self, number_page):
+        params = {
+            "page": number_page
+        }
+        r = requests.get(self.url + self.email + "/comments", params=params)
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
 
-
-
-
+    def delete_comment(self, id_comment, auth):
+        r = requests.delete(self.url + self.email + "/comment/" + id_comment, auth=auth)
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
