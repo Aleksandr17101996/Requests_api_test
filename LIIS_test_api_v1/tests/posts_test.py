@@ -5,6 +5,7 @@ from requests.auth import HTTPBasicAuth
 
 class TestPosts(Posts):
     auth_user = HTTPBasicAuth(Base.USER_NAME, Base.USER_PASSWORD)
+    auth_user_incorrect_pass = HTTPBasicAuth(Base.USER_EMAIL, Base.INCORRECT_PASSWORD)
 
     def test_get_posts(self):
         """ Проверяем что  на запрос о получении данных о всех постах пользователя возвращается
@@ -62,3 +63,12 @@ class TestPosts(Posts):
         status_code = self.delete_post(post_id, self.auth_user)
         assert status_code == 204, "Статус кода не соответсвует ожидаемому"
 
+    def test_post_posts_invalid_user(self):
+        """ Проверяем что  при отправке запроса на сервер с авторизацией польователя с неверным паролем
+         о добавлении поста возвращается статус кода 401, возвразщается обработанная ошибка с описанием """
+
+        title = "Заголовок поста(неправильный пароль)"
+        content = "Текст поста(неправильный пароль)"
+        status_code, body = self.post_posts(title, content, self.auth_user_incorrect_pass)
+        assert status_code == 401, "Статус кода не соответсвует ожидаемому"
+        assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
