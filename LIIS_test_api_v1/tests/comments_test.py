@@ -106,6 +106,7 @@ class TestComments(Comments):
     def test_delete_comment_invalid_user(self):
         """ Проверяем что при отправке запроса на удаление комментария найденного по id,
             пользователем имеющего неправильный пароль, возвращается статус кода 401"""
+
         comment_id = self.test_get_comments()
         status_code, headers = self.delete_comment(comment_id, self.auth_user_incorrect_pass)
         assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE.value
@@ -124,6 +125,7 @@ class TestComments(Comments):
     def test_delete_non_existent_comment(self):
         """ Проверяем что при отправке запроса на удаление несуществующего комментария
             возвращается статус кода 404"""
+
         status_code, headers = self.delete_comment(generate_random_id(), self.auth_user)
         assert status_code == 404, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
