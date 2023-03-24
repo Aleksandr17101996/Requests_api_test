@@ -122,3 +122,10 @@ class TestComments(Comments):
         assert status_code == 404, "Статус кода не соответсвует"
         assert body["message"] == "Comment not found"
 
+    def test_delete_non_existent_comment(self):
+        """ Проверяем что при отправке запроса на удаление несуществующего комментария
+             возвращается статус кода 404"""
+        comment_id = "9999999"
+        status_code, headers = self.delete_comment(comment_id, self.auth_user)
+        assert status_code == 404, "Статус кода не соответсвует"
+        assert headers["Content-Type"] == "application/json"
