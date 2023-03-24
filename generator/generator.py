@@ -1,4 +1,5 @@
 import random
+import string
 
 from data.data import Person
 from faker import Faker
@@ -13,3 +14,9 @@ def generated_person():
         password=random.randint(100, 9999),
         email=faker_en.email(),
     )
+
+
+def generate_random_string(length):
+    letters = string.ascii_lowercase
+    rand_string = ''.join(random.choice(letters) for i in range(length))
+    return rand_string
