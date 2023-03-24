@@ -6,6 +6,4 @@ class Base:
     USER_NAME = "QAtester"
     USER_PASSWORD = "123"
     USER_EMAIL = "qatester@mail.com"
-
-
-
+    INCORRECT_PASSWORD = "012"
