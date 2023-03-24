@@ -72,3 +72,22 @@ class TestPosts(Posts):
         status_code, body = self.post_posts(title, content, self.auth_user_incorrect_pass)
         assert status_code == 401, "Статус кода не соответсвует ожидаемому"
         assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
+
+    def test_put_post_invalid_user(self):
+        """ Проверяем что запроса на сервер с авторизацией польователя с неверным паролем
+                 о обновлении поста возвращается статус кода 401, возвразщается обработанная ошибка с описанием """
+
+        update_title = "Обновленный заголовок поста(Неправильный пароль)"
+        update_content = "Обновленное тело поста(Неправильный пароль)"
+        post_id = self.test_get_posts()
+        status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user_incorrect_pass)
+        assert status_code == 401, "Статус кода не соответсвует ожидаемому"
+        assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
+
+    def test_delete_post_invalid_user(self):
+        """ Проверяем что при отправке запроса на удаление поста найденного по id,
+            пользователем с непраильныим паролем, возвращается статус кода 401"""
+        post_id = self.test_get_posts()
+        status_code = self.delete_post(post_id, self.auth_user_incorrect_pass)
+        assert status_code == 401, "Статус кода не соответсвует ожидаемому"
+
