@@ -98,7 +98,13 @@ class TestPosts(Posts):
 
         update_title = "Обновленный заголовок несуществующего поста"
         update_content = "Обновленное тело несуществующего поста"
-        post_id = "1"
+        post_id = "9999999999"
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует ожидаемому"
         assert body["message"] == "Post not found"
+
+    def test_delete_non_existent_post(self):
+        post_id = "9999999999"
+        status_code = self.delete_post(post_id, self.auth_user)
+        assert status_code == 404, "Статус кода не соответсвует ожидаемому"
+
