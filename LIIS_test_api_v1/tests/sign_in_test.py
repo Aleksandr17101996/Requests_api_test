@@ -6,7 +6,7 @@ class TestNewUser(NewUser):
 
     def test_add_new_user(self):
         """Тест содержит позитивный тестовый сценарий выполняя запрос на регистрацию пользователя
-                       с валидными данными, которые сгенерированы автоматически"""
+           с валидными данными, которые сгенерированы автоматически"""
 
         person_info = next(generated_person())
         email = person_info.email
@@ -32,7 +32,7 @@ class TestNewUser(NewUser):
 
     def test_add_existin_email_user(self):
         """Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
-                               с почтой уже зарегестрированного пользователя"""
+           с почтой уже зарегестрированного пользователя"""
 
         person_info = next(generated_person())
         name = person_info.user_name
@@ -44,7 +44,7 @@ class TestNewUser(NewUser):
 
     def test_not_valid_password(self):
         """Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
-                с паролем в формате int, и данными которые сгенерированы автоматически"""
+           с паролем в формате int, и данными которые сгенерированы автоматически"""
 
         person_info = next(generated_person())
         email = person_info.email
