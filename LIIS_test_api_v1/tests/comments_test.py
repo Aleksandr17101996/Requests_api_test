@@ -2,6 +2,7 @@ from LIIS_test_api_v1.comments_api import Comments
 from config import Base
 from requests.auth import HTTPBasicAuth
 from LIIS_test_api_v1.tests.posts_test import TestPosts
+from generator.generator import generate_random_string, generate_random_id
 
 tp = TestPosts()
 
@@ -32,8 +33,8 @@ class TestComments(Comments):
            о добавлении комментария к посту найденного по id,  возвращается статус кода 201,
                 а так же заголовок и тело комментария идентичные с отправленными"""
 
-        title = "Заголовок коментария"
-        content = "Текст коментария"
+        title = generate_random_string(5)
+        content = generate_random_string(12)
         post_id = self.post_id
         status_code, body = self.posts_comment(title, content, post_id, self.auth_user)
         assert status_code == 201, "Статус кода не соответсвует"
@@ -53,8 +54,8 @@ class TestComments(Comments):
                 статус кода 200 и в теле ответа содержатся данные о успешном обновлении комментария"""
 
         comment_id = self.test_get_comments()
-        title = "Обновленный заголовок комментария"
-        content = "Обновленный текст комментария"
+        title = generate_random_string(5)
+        content = generate_random_string(12)
         status_code, body = self.put_comment(comment_id, title, content, self.auth_user)
         assert status_code == 200, "Статус кода не соответсвует"
         assert body["message"] == "updated"
@@ -73,8 +74,8 @@ class TestComments(Comments):
                    и в теле ответа обработтаное описание ошибки  """
 
         post_id = "99999"
-        title = "Заголовок коментария на чужой пост"
-        content = "Текст коментария на чужой пост"
+        title = generate_random_string(5)
+        content = generate_random_string(12)
         status_code, body = self.posts_comment(title, content, post_id, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует"
         assert body["message"] == "Post not found"
@@ -84,8 +85,8 @@ class TestComments(Comments):
                  о добавлении комментария к посту найденного по id,  возвращается статус кода 401,
                   а так же тело ответа содержит информацию о обработанной ошибке"""
 
-        title = "Заголовок коментария пользователя с непраильным паролем"
-        content = "Текст коментария пользователя с непраильным паролем"
+        title = generate_random_string(5)
+        content = generate_random_string(12)
         post_id = self.post_id
         status_code, body = self.posts_comment(title, content, post_id, self.auth_user_incorrect_pass)
         assert status_code == 401, "Статус кода не соответсвует"
@@ -97,8 +98,8 @@ class TestComments(Comments):
              а так же тело ответа содержит информацию о обработанной ошибке"""
 
         comment_id = self.test_get_comments()
-        title = "Обновленный заголовок комментария"
-        content = "Обновленный текст комментария"
+        title = generate_random_string(5)
+        content = generate_random_string(12)
         status_code, body = self.put_comment(comment_id, title, content, self.auth_user_incorrect_pass)
         assert status_code == 401, "Статус кода не соответсвует"
         assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
@@ -115,17 +116,15 @@ class TestComments(Comments):
         """ Проверяем что  на запрос о обнавление данных в несуществующем комментарии,
             возвращается статус кода 404 и в теле ответа содержатся данные о ошибке"""
 
-        comment_id = "9999999"
-        title = "Обновленный заголовок комментария несуществующего поста"
-        content = "Обновленный текст комментария несуществующего поста"
-        status_code, body = self.put_comment(comment_id, title, content, self.auth_user)
+        title = generate_random_string(5)
+        content = generate_random_string(12)
+        status_code, body = self.put_comment(generate_random_id(), title, content, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует"
         assert body["message"] == "Comment not found"
 
     def test_delete_non_existent_comment(self):
         """ Проверяем что при отправке запроса на удаление несуществующего комментария
              возвращается статус кода 404"""
-        comment_id = "9999999"
-        status_code, headers = self.delete_comment(comment_id, self.auth_user)
+        status_code, headers = self.delete_comment(generate_random_id(), self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует"
         assert headers["Content-Type"] == "application/json"

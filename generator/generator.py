@@ -20,3 +20,8 @@ def generate_random_string(length):
     letters = string.ascii_lowercase
     rand_string = ''.join(random.choice(letters) for i in range(length))
     return rand_string
+
+
+def generate_random_id():
+    randon_id = random.randint(100000000, 9999999999)
+    return str(randon_id)
