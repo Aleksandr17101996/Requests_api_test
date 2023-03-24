@@ -63,6 +63,7 @@ class TestPosts(Posts):
         status_code = self.delete_post(post_id, self.auth_user)
         assert status_code == 204, "Статус кода не соответсвует ожидаемому"
 
+
     def test_post_posts_invalid_user(self):
         """ Проверяем что  при отправке запроса на сервер с авторизацией польователя с неверным паролем
          о добавлении поста возвращается статус кода 401, возвразщается обработанная ошибка с описанием """
@@ -91,3 +92,13 @@ class TestPosts(Posts):
         status_code = self.delete_post(post_id, self.auth_user_incorrect_pass)
         assert status_code == 401, "Статус кода не соответсвует ожидаемому"
 
+    def test_put_non_existent_post(self):
+        """ Проверяем что  на запрос о обнавление данных в несуществующем посте,
+            возвращается статус кода 404 и в теле ответа содержатся данные о ошибке"""
+
+        update_title = "Обновленный заголовок несуществующего поста"
+        update_content = "Обновленное тело несуществующего поста"
+        post_id = "1"
+        status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
+        assert status_code == 404, "Статус кода не соответсвует ожидаемому"
+        assert body["message"] == "Post not found"
