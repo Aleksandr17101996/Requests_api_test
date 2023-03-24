@@ -2,7 +2,7 @@ import requests
 from config import Base
 
 
-class NewUser:
+class NewUser(Base):
     url = Base.BASE_URL_V1
     email = Base.USER_EMAIL
 
