@@ -1,5 +1,6 @@
 from LIIS_test_api_v1.sign_in import NewUser
 from generator.generator import generated_person
+from config import GlobalErrorMessages
 
 
 class TestNewUser(NewUser):
@@ -13,10 +14,10 @@ class TestNewUser(NewUser):
         password = person_info.password
         name = person_info.user_name
         status_code, body = self.sign_in_new_user(name, email, str(password))
-        assert status_code == 201, "Статус кода не соответсвует ожидаемому"
-        assert body["username"] == name, "Имя пользователя в ответе неверно"
-        assert body["email"] == email, "Email пользователя в ответе не верен"
-        assert int(body["id"]) > 0, "id не является числом"
+        assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["username"] == name, GlobalErrorMessages.WRONG_BODY.value
+        assert body["email"] == email, GlobalErrorMessages.WRONG_BODY.value
+        assert int(body["id"]) > 0, GlobalErrorMessages.WRONG_BODY.value
 
     def test_add_existin_name_user(self):
         """ Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
@@ -27,7 +28,7 @@ class TestNewUser(NewUser):
         password = person_info.password
         user_name = "Alexandr"  # Имя Alexandr уже зарегестрированно в системе
         status_code, body = self.sign_in_new_user(user_name, email, str(password))
-        assert status_code == 409, "Статус кода не соответсвует ожидаемому"
+        assert status_code == 409, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["message"] == "User with this username or email already exists"
 
     def test_add_existin_email_user(self):
@@ -39,7 +40,7 @@ class TestNewUser(NewUser):
         password = person_info.password
         user_email = "Alexandr@mail.com"  # Данная почта уже зарегестрированна в системе.
         status_code, body = self.sign_in_new_user(name, user_email, str(password))
-        assert status_code == 409, "Статус кода не соответсвует ожидаемому"
+        assert status_code == 409, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["message"] == "User with this username or email already exists"
 
     def test_not_valid_password(self):
@@ -51,6 +52,5 @@ class TestNewUser(NewUser):
         password = person_info.password
         name = person_info.user_name
         status_code, body = self.sign_in_new_user(name, email, password)
-        assert status_code == 422, "Статус кода не соответсвует ожидаемому"
-        assert body["password"][-1] == "Not a valid string.", "Ошибка не обработана"
-
+        assert status_code == 422, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["password"][-1] == "Not a valid string.", GlobalErrorMessages.WRONG_VALIDATION.value
