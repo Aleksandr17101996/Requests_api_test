@@ -7,6 +7,10 @@ class GrantUserAdminRole:
     email = Base.USER_EMAIL
 
     def put_admin_rights_user(self, user_id, auth):
+        """Метод позваляет представить пользователю роль администратор
+           принимает на вход id пользователя которому необходимо предоставить права,
+           возвращает статус код и тело ответа"""
+
         data = {
             "user_id": user_id
         }
