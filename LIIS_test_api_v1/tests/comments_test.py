@@ -103,3 +103,22 @@ class TestComments(Comments):
         assert status_code == 401, "Статус кода не соответсвует"
         assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
 
+    def test_delete_comment_invalid_user(self):
+        """ Проверяем что при отправке запроса на удаление комментария найденного по id,
+            пользователем имеющего неправильный пароль, возвращается статус кода 401"""
+        comment_id = self.test_get_comments()
+        status_code, headers = self.delete_comment(comment_id, self.auth_user_incorrect_pass)
+        assert status_code == 401, "Статус кода не соответсвует"
+        assert headers["Content-Type"] == "application/json"
+
+    def test_put_non_existent_comment(self):
+        """ Проверяем что  на запрос о обнавление данных в несуществующем комментарии,
+            возвращается статус кода 404 и в теле ответа содержатся данные о ошибке"""
+
+        comment_id = "9999999"
+        title = "Обновленный заголовок комментария несуществующего поста"
+        content = "Обновленный текст комментария несуществующего поста"
+        status_code, body = self.put_comment(comment_id, title, content, self.auth_user)
+        assert status_code == 404, "Статус кода не соответсвует"
+        assert body["message"] == "Comment not found"
+
