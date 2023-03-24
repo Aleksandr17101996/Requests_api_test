@@ -1,7 +1,7 @@
 from LIIS_test_api_v1.posts_api import Posts
 from config import Base
 from requests.auth import HTTPBasicAuth
-from generator.generator import generate_random_string
+from generator.generator import generate_random_string, generate_random_id
 
 
 class TestPosts(Posts):
@@ -98,8 +98,7 @@ class TestPosts(Posts):
 
         update_title = generate_random_string(4)
         update_content = generate_random_string(10)
-        post_id = "9999999999"
-        status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
+        status_code, body = self.put_post(generate_random_id(), update_title, update_content, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует ожидаемому"
         assert body["message"] == "Post not found"
 
@@ -107,6 +106,5 @@ class TestPosts(Posts):
         """ Проверяем что  на запрос о удалении несуществующего поста,
             возвращается статус кода 404"""
 
-        post_id = "9999999999"
-        status_code = self.delete_post(post_id, self.auth_user)
+        status_code = self.delete_post(generate_random_id(), self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует ожидаемому"
