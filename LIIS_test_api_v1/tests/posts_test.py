@@ -104,6 +104,9 @@ class TestPosts(Posts):
         assert body["message"] == "Post not found"
 
     def test_delete_non_existent_post(self):
+        """ Проверяем что  на запрос о удалении несуществующего поста,
+            возвращается статус кода 404"""
+
         post_id = "9999999999"
         status_code = self.delete_post(post_id, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует ожидаемому"
