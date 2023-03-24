@@ -13,6 +13,9 @@ def generated_person():
         user_name=faker_en.last_name_female(),
         password=random.randint(100, 9999),
         email=faker_en.email(),
+        first_name=faker_en.first_name(),
+        middle_name=faker_en.first_name_male(),
+        last_name=faker_en.last_name_female(),
     )
 
 
