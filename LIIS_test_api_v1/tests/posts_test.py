@@ -1,6 +1,7 @@
 from LIIS_test_api_v1.posts_api import Posts
 from config import Base
 from requests.auth import HTTPBasicAuth
+from generator.generator import generate_random_string
 
 
 class TestPosts(Posts):
@@ -29,8 +30,8 @@ class TestPosts(Posts):
                о добавлении поста  возвращается статус кода 201, а так же заголовок и тело поста
                идентичные с отправленными"""
 
-        title = "Заголовок поста"
-        content = "Тело поста"
+        title = generate_random_string(4)
+        content = generate_random_string(10)
         status_code, body = self.post_posts(title, content, self.auth_user)
         assert status_code == 201, "Статус кода не соответсвует ожидаемому"
         assert body["title"] == title, "Заголовок поста в теле ответа не идентичен отправленному"
@@ -49,8 +50,8 @@ class TestPosts(Posts):
         """ Проверяем что  на запрос о обнавление данных в посте пользователя, найденого по id поста, возвращается
                          статус кода 200 и в теле ответа содержатся данные о успешном обновлении поста"""
 
-        update_title = "Обновленный заголовок поста"
-        update_content = "Обновленное тело поста"
+        update_title = generate_random_string(4)
+        update_content = generate_random_string(10)
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
         assert status_code == 200, "Статус кода не соответсвует ожидаемому"
@@ -63,13 +64,12 @@ class TestPosts(Posts):
         status_code = self.delete_post(post_id, self.auth_user)
         assert status_code == 204, "Статус кода не соответсвует ожидаемому"
 
-
     def test_post_posts_invalid_user(self):
         """ Проверяем что  при отправке запроса на сервер с авторизацией польователя с неверным паролем
          о добавлении поста возвращается статус кода 401, возвразщается обработанная ошибка с описанием """
 
-        title = "Заголовок поста(неправильный пароль)"
-        content = "Текст поста(неправильный пароль)"
+        title = generate_random_string(4)
+        content = generate_random_string(10)
         status_code, body = self.post_posts(title, content, self.auth_user_incorrect_pass)
         assert status_code == 401, "Статус кода не соответсвует ожидаемому"
         assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
@@ -78,8 +78,8 @@ class TestPosts(Posts):
         """ Проверяем что запроса на сервер с авторизацией польователя с неверным паролем
                  о обновлении поста возвращается статус кода 401, возвразщается обработанная ошибка с описанием """
 
-        update_title = "Обновленный заголовок поста(Неправильный пароль)"
-        update_content = "Обновленное тело поста(Неправильный пароль)"
+        update_title = generate_random_string(4)
+        update_content = generate_random_string(10)
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user_incorrect_pass)
         assert status_code == 401, "Статус кода не соответсвует ожидаемому"
@@ -96,8 +96,8 @@ class TestPosts(Posts):
         """ Проверяем что  на запрос о обнавление данных в несуществующем посте,
             возвращается статус кода 404 и в теле ответа содержатся данные о ошибке"""
 
-        update_title = "Обновленный заголовок несуществующего поста"
-        update_content = "Обновленное тело несуществующего поста"
+        update_title = generate_random_string(4)
+        update_content = generate_random_string(10)
         post_id = "9999999999"
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует ожидаемому"
@@ -110,4 +110,3 @@ class TestPosts(Posts):
         post_id = "9999999999"
         status_code = self.delete_post(post_id, self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует ожидаемому"
-
