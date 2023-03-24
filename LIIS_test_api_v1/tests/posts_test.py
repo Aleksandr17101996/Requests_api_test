@@ -1,5 +1,5 @@
 from LIIS_test_api_v1.posts_api import Posts
-from config import Base
+from config import Base, GlobalErrorMessages
 from requests.auth import HTTPBasicAuth
 from generator.generator import generate_random_string, generate_random_id
 
@@ -17,12 +17,12 @@ class TestPosts(Posts):
         if len(body) == 0:
             self.test_post_posts()
             status_code, body = self.get_post()
-            assert status_code == 200, "Статус кода не соответсвует ожидаемому"
-            assert len(body) > 0, "В списке нет добавленных постов"
+            assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
+            assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
-            assert status_code == 200, "Статус кода не соответсвует ожидаемому"
-            assert len(body) > 0, "В списке нет добавленных постов"
+            assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
+            assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
 
     def test_post_posts(self):
@@ -33,9 +33,9 @@ class TestPosts(Posts):
         title = generate_random_string(4)
         content = generate_random_string(10)
         status_code, body = self.post_posts(title, content, self.auth_user)
-        assert status_code == 201, "Статус кода не соответсвует ожидаемому"
-        assert body["title"] == title, "Заголовок поста в теле ответа не идентичен отправленному"
-        assert body["content"] == content, "Тело поста в ответе не идентичен отправленному"
+        assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["title"] == title, GlobalErrorMessages.WRONG_BODY.value
+        assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
 
     def test_get_new_post(self):
         """ Проверяем что  на запрос о получении данных о посте  пользователя найденого по id возвращается
@@ -43,8 +43,8 @@ class TestPosts(Posts):
 
         post_id = self.test_get_posts()
         status_code, body = self.get_new_post(post_id)
-        assert status_code == 200, "Статус кода не соответсвует ожидаемому"
-        assert body["id"] == int(post_id), "Тело ответа имеет id который не соответсвует ожидаемому"
+        assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["id"] == int(post_id), GlobalErrorMessages.WRONG_BODY.value
 
     def test_put_post(self):
         """ Проверяем что  на запрос о обнавление данных в посте пользователя, найденого по id поста, возвращается
