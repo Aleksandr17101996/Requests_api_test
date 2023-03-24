@@ -58,7 +58,7 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.put_comment(comment_id, title, content, self.auth_user)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "updated"
+        assert body["message"] == "updated", GlobalErrorMessages.WRONG_BODY.value
 
     def test_delete_comment(self):
         """ Проверяем что при отправке запроса на удаление комментария найденного по id, возвращается статус кода 204"""
@@ -66,7 +66,7 @@ class TestComments(Comments):
         comment_id = self.test_get_comments()
         status_code, headers = self.delete_comment(comment_id, self.auth_user)
         assert status_code == 204, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json"
+        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
 
     def test_post_comment_someone_else_post(self):
         """ Проверяем что  при отправке запроса на сервер с авторизацией существующего польователя
@@ -77,7 +77,7 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.posts_comment(title, content, generate_random_id(), self.auth_user)
         assert status_code == 404, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Post not found"
+        assert body["message"] == "Post not found", GlobalErrorMessages.WRONG_VALIDATION.value
 
     def test_post_comment_invalid_user(self):
         """ Проверяем что  при отправке запроса на сервер с авторизацией польователя имеющего неправильный пароль
@@ -89,7 +89,7 @@ class TestComments(Comments):
         post_id = self.post_id
         status_code, body = self.posts_comment(title, content, post_id, self.auth_user_incorrect_pass)
         assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
+        assert body["message"] == "Could not verify your login!", GlobalErrorMessages.WRONG_VALIDATION.value
 
     def test_put_comment_invalid_user(self):
         """ Проверяем что  на запрос о обнавление данных в комментарии, найденого по id поста,
@@ -101,7 +101,7 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.put_comment(comment_id, title, content, self.auth_user_incorrect_pass)
         assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", "Ошибка не обработана"
+        assert body["message"] == "Could not verify your login!", GlobalErrorMessages.WRONG_VALIDATION.value
 
     def test_delete_comment_invalid_user(self):
         """ Проверяем что при отправке запроса на удаление комментария найденного по id,
@@ -109,7 +109,7 @@ class TestComments(Comments):
         comment_id = self.test_get_comments()
         status_code, headers = self.delete_comment(comment_id, self.auth_user_incorrect_pass)
         assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json"
+        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
 
     def test_put_non_existent_comment(self):
         """ Проверяем что  на запрос о обнавление данных в несуществующем комментарии,
@@ -119,11 +119,11 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.put_comment(generate_random_id(), title, content, self.auth_user)
         assert status_code == 404, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Comment not found"
+        assert body["message"] == "Comment not found", GlobalErrorMessages.WRONG_VALIDATION
 
     def test_delete_non_existent_comment(self):
         """ Проверяем что при отправке запроса на удаление несуществующего комментария
             возвращается статус кода 404"""
         status_code, headers = self.delete_comment(generate_random_id(), self.auth_user)
         assert status_code == 404, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json"
+        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
