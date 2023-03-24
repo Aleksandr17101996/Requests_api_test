@@ -29,6 +29,16 @@ class Comments:
         body = r.json()
         return status_code, body
 
+    def put_comment(self, id_comment, title, text, auth):
+        data = {
+            "title": title,
+            "text": text
+        }
+        r = requests.put(self.url + self.email + "/comment/" + id_comment, auth=auth, json=data)
+        status_code = r.status_code
+        body = r.json()
+        return status_code, body
+
 
 
 
