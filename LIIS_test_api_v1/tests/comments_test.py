@@ -73,10 +73,9 @@ class TestComments(Comments):
                    о добавлении комментария к несуществующему посту,  возвращается статус кода 404,
                    и в теле ответа обработтаное описание ошибки  """
 
-        post_id = "99999"
         title = generate_random_string(5)
         content = generate_random_string(12)
-        status_code, body = self.posts_comment(title, content, post_id, self.auth_user)
+        status_code, body = self.posts_comment(title, content, generate_random_id(), self.auth_user)
         assert status_code == 404, "Статус кода не соответсвует"
         assert body["message"] == "Post not found"
 
