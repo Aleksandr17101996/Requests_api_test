@@ -5,7 +5,7 @@ from config import Base, GlobalErrorMessages
 from LIIS_test_api_v1.tests.posts_test import TestPosts
 from generator.generator import generate_random_string, generate_random_id
 from jsonschema import validate
-from data.schemas import COMMENT_SCHEMA, COMMENTS_SCHEMA
+from data.schemas.schemas import COMMENT_SCHEMA, COMMENTS_SCHEMA
 
 tp = TestPosts()
 

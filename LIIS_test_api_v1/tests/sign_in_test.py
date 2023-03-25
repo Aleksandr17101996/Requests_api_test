@@ -2,7 +2,7 @@ from LIIS_test_api_v1.sign_in import NewUser
 from generator.generator import generated_person
 from config import GlobalErrorMessages
 from jsonschema import validate
-from data.schemas import NEW_USER_SCHEMA
+from data.schemas.schemas import NEW_USER_SCHEMA
 
 
 class TestNewUser(NewUser):

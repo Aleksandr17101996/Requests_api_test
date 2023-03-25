@@ -2,7 +2,7 @@ from requests.auth import HTTPBasicAuth
 
 from LIIS_test_api_v1.posts_api import Posts
 from config import Base, GlobalErrorMessages
-from data.schemas import POST_SCHEMA, POSTS_SCHEMA
+from data.schemas.schemas import POST_SCHEMA, POSTS_SCHEMA
 from generator.generator import generate_random_string, generate_random_id
 from jsonschema import validate
 
