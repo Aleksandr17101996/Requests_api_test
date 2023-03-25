@@ -1,7 +1,10 @@
+from requests.auth import HTTPBasicAuth
+
 from LIIS_test_api_v1.posts_api import Posts
 from config import Base, GlobalErrorMessages
-from requests.auth import HTTPBasicAuth
+from data.schemas import POST_SCHEMA, POSTS_SCHEMA
 from generator.generator import generate_random_string, generate_random_id
+from jsonschema import validate
 
 
 class TestPosts(Posts):
@@ -17,10 +20,12 @@ class TestPosts(Posts):
         if len(body) == 0:
             self.test_post_posts()
             status_code, body = self.get_post()
+            validate(body, POSTS_SCHEMA)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
+            validate(body, POSTS_SCHEMA)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
@@ -36,7 +41,7 @@ class TestPosts(Posts):
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["title"] == title, GlobalErrorMessages.WRONG_BODY.value
         assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
-
+        validate(body, POST_SCHEMA)
     def test_get_new_post(self):
         """ Проверяем что  на запрос о получении данных о посте  пользователя найденого по id возвращается
             статус кода 200 и id поста в теле ответа идентичен с id по которому осуществлялся поиск"""

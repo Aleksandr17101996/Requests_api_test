@@ -24,4 +24,10 @@ class TestNewUser(AddNewUser):
         assert body["middle_name"] == middle_name, GlobalErrorMessages.WRONG_BODY.value
         assert body["last_name"] == last_name, GlobalErrorMessages.WRONG_BODY.value
 
+    def test_add_existin_name_user(self):
+        """ Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
+            с именем уже зарегестрированного пользователя, почта и пароль генерируются автоматически"""
+
+
+
 
