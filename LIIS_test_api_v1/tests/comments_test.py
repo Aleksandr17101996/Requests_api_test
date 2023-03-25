@@ -3,6 +3,7 @@ from config import Base, GlobalErrorMessages
 from requests.auth import HTTPBasicAuth
 from LIIS_test_api_v1.tests.posts_test import TestPosts
 from generator.generator import generate_random_string, generate_random_id
+from jsonschema import validate
 
 tp = TestPosts()
 
@@ -20,9 +21,10 @@ class TestComments(Comments):
         status_code, body = self.get_comments()
         if len(body) == 0:
             self.test_post_comments()
+            status_code, body = self.get_comments()
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
-            return str(body['id'])
+            return str(body[-1]['id'])
         else:
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
