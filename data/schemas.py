@@ -45,3 +45,13 @@ COMMENTS_SCHEMA = {
 }
 
 
+NEW_USER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "id": {"type": "number"},
+        "username": {"type": "string"},
+        "email": {"type": "string"},
+        "password": {"type": "string"}
+    },
+    "required": ["id"]
+}
