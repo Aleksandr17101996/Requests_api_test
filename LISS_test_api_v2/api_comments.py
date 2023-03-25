@@ -35,7 +35,7 @@ class Comments:
         """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате
            JSON с добавленным комментарием, найденного по id"""
 
-        r = requests.get(self.url + self.email + "/comment" + id_comment)
+        r = requests.get(self.url + self.email + "/comment/" + id_comment)
         status_code = r.status_code
         body = r.json()
         return status_code, body
@@ -71,5 +71,5 @@ class Comments:
 
         r = requests.delete(self.url + self.email + "/comment/" + id_comment, auth=auth)
         status_code = r.status_code
-        body = r.json()
-        return status_code, body
+        headers = r.headers
+        return status_code, headers
