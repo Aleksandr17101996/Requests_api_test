@@ -65,10 +65,10 @@ class Posts:
         """Метод отправляет на сервер запрос на удаление поста по указанному ID и возвращает
            статус запроса и результат в формате JSON с текстом уведомления о успешном удалении"""
 
-        r = requests.delete(self.url + self.email + "/post" + post_id, auth=auth)
+        r = requests.delete(self.url + self.email + "/post/" + post_id, auth=auth)
         status_code = r.status_code
-        body = r.json()
-        return status_code, body
+        headers = r.headers
+        return status_code, headers
 
 
 
