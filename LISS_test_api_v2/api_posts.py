@@ -9,13 +9,11 @@ class Posts:
     """Библиотека api для работы с постами форума"""
 
     def get_post_pagination(self, number_page):
-        params = {
-            "page": number_page
-        }
+        params = {'page': number_page}
         r = requests.get(self.url + self.email + "/posts", params=params)
         status_code = r.status_code
         body = r.json()
-        assert status_code, body
+        return status_code, body
 
     def get_posts(self):
         """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате
