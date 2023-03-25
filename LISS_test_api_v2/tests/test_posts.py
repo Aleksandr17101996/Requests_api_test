@@ -71,8 +71,8 @@ class TestPosts(Posts):
         assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
 
     def test_get_post_pagination(self):
-        """
-                    """
+        """ Проверяем что при отправке запроса на выдачу комментариев с выбранной страницы
+            возвращается статус кода 200"""
 
         numbers_page = "2"
         status_code, body = self.get_post_pagination(numbers_page)
