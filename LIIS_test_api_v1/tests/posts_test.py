@@ -42,6 +42,7 @@ class TestPosts(Posts):
         assert body["title"] == title, GlobalErrorMessages.WRONG_BODY.value
         assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
         validate(body, POST_SCHEMA)
+
     def test_get_new_post(self):
         """ Проверяем что  на запрос о получении данных о посте  пользователя найденого по id возвращается
             статус кода 200 и id поста в теле ответа идентичен с id по которому осуществлялся поиск"""
@@ -50,6 +51,7 @@ class TestPosts(Posts):
         status_code, body = self.get_new_post(post_id)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["id"] == int(post_id), GlobalErrorMessages.WRONG_BODY.value
+        validate(body, POST_SCHEMA)
 
     def test_put_post(self):
         """ Проверяем что  на запрос о обнавление данных в посте пользователя, найденого по id поста, возвращается
