@@ -4,6 +4,7 @@ from requests.auth import HTTPBasicAuth
 from LIIS_test_api_v1.tests.posts_test import TestPosts
 from generator.generator import generate_random_string, generate_random_id
 from jsonschema import validate
+from data.schemas import COMMENT_SCHEMA, COMMENTS_SCHEMA
 
 tp = TestPosts()
 
@@ -22,10 +23,12 @@ class TestComments(Comments):
         if len(body) == 0:
             self.test_post_comments()
             status_code, body = self.get_comments()
+            validate(body, COMMENTS_SCHEMA)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
+            validate(body, COMMENTS_SCHEMA)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
@@ -42,6 +45,8 @@ class TestComments(Comments):
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["title"] == title, GlobalErrorMessages.WRONG_BODY.value
         assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
+        validate(body, COMMENT_SCHEMA)
+
     def test_get_comment(self):
         """ Проверяем что  на запрос о получении данных о комментарии найденого по id возвращается
             статус кода 200 и id поста в теле ответа идентичен с id по которому осуществлялся поиск"""
@@ -50,6 +55,7 @@ class TestComments(Comments):
         status_code, body = self.get_comment(comment_id)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["id"] == int(comment_id), GlobalErrorMessages.WRONG_BODY.value
+        validate(body, COMMENT_SCHEMA)
 
     def test_put_comment(self):
         """ Проверяем что  на запрос о обнавление данных в комментарии, найденого по id поста, возвращается
