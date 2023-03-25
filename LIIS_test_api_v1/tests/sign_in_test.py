@@ -1,6 +1,8 @@
 from LIIS_test_api_v1.sign_in import NewUser
 from generator.generator import generated_person
 from config import GlobalErrorMessages
+from jsonschema import validate
+from data.schemas import NEW_USER_SCHEMA
 
 
 class TestNewUser(NewUser):
@@ -14,6 +16,7 @@ class TestNewUser(NewUser):
         password = person_info.password
         name = person_info.user_name
         status_code, body = self.sign_in_new_user(name, email, str(password))
+        validate(body, NEW_USER_SCHEMA)
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["username"] == name, GlobalErrorMessages.WRONG_BODY.value
         assert body["email"] == email, GlobalErrorMessages.WRONG_BODY.value
