@@ -74,3 +74,15 @@ class TestNewUser(AddNewUser):
         status_code, body = self.sign_in_new_user(name, email, str(password), first_name, middle_name, last_name, )
         assert status_code == 409, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["message"] == "User with this username or email already exists", GlobalErrorMessages.WRONG_VALIDATION.value
+
+    def test_not_valid_password(self):
+        """Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
+           с паролем в формате int, и данными которые сгенерированы автоматически"""
+
+        person_info = next(generated_person())
+        email = person_info.email
+        password = person_info.password
+        name = person_info.user_name
+        status_code, body = self.sign_in_new_user(name, email, password, None, None, None)
+        assert status_code == 422, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["password"][-1] == "Not a valid string.", GlobalErrorMessages.WRONG_VALIDATION.value
