@@ -15,4 +15,4 @@ class TestGrantUserAdminRole(GrantUserAdminRole):
 
         status_code, body = self.put_admin_rights_user(self.user_id, self.auth_admin)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["messange"] == "update", GlobalErrorMessages.WRONG_BODY.value
+        assert body["message"] == "updated", GlobalErrorMessages.WRONG_BODY.value
