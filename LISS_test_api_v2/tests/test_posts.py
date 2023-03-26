@@ -2,11 +2,11 @@ from LISS_test_api_v2.api_posts import Posts
 from requests.auth import HTTPBasicAuth
 from config import Base, GlobalErrorMessages
 from data.generator import generate_random_string, generate_random_id
-from data.validator import Validate
+from data.validator import ValidatePost
 
 
 class TestPosts(Posts):
-    v = Validate()
+    vp = ValidatePost()
     auth_user = HTTPBasicAuth(Base.USER_NAME, Base.USER_PASSWORD)
     auth_admin = HTTPBasicAuth(Base.USER_NAME_ADMIN, Base.USER_PASSWORD_ADMIN)
     auth_user_incorrect_pass = HTTPBasicAuth(Base.USER_EMAIL, Base.INCORRECT_PASSWORD)
@@ -20,12 +20,12 @@ class TestPosts(Posts):
         if len(body) == 0:
             self.test_post_posts_user()
             status_code, body = self.get_posts()
-            self.v.array_validation(body)
+            self.vp.array_validation(body)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
-            self.v.array_validation(body)
+            self.vp.array_validation(body)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
@@ -38,7 +38,7 @@ class TestPosts(Posts):
         name = generate_random_string(5)
         content = generate_random_string(12)
         status_code, body = self.post_post(name, content, self.auth_user)
-        self.v.validate(body)
+        self.vp.dict_validation(body)
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["name"] == name, GlobalErrorMessages.WRONG_BODY.value
         assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
@@ -49,7 +49,7 @@ class TestPosts(Posts):
 
         post_id = self.test_get_posts()
         status_code, body = self.get_post(post_id)
-        self.v.validate(body)
+        self.vp.dict_validation(body)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["id"] == int(post_id), GlobalErrorMessages.WRONG_BODY.value
 
