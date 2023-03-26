@@ -1,12 +1,12 @@
 from LISS_test_api_v2.api_posts import Posts
 from requests.auth import HTTPBasicAuth
 from config import Base, GlobalErrorMessages
-from generator.generator import generate_random_string, generate_random_id
-from jsonschema import validate
-from data.schemas.schemas import POST_SCHEMA, POSTS_SCHEMA
+from data.generator import generate_random_string, generate_random_id
+from data.validator import Validate
 
 
 class TestPosts(Posts):
+    v = Validate()
     auth_user = HTTPBasicAuth(Base.USER_NAME, Base.USER_PASSWORD)
     auth_admin = HTTPBasicAuth(Base.USER_NAME_ADMIN, Base.USER_PASSWORD_ADMIN)
     auth_user_incorrect_pass = HTTPBasicAuth(Base.USER_EMAIL, Base.INCORRECT_PASSWORD)
@@ -20,12 +20,12 @@ class TestPosts(Posts):
         if len(body) == 0:
             self.test_post_posts_user()
             status_code, body = self.get_posts()
-            validate(body, POSTS_SCHEMA)
+            self.v.array_validation(body)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
-            validate(body, POSTS_SCHEMA)
+            self.v.array_validation(body)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
@@ -38,10 +38,10 @@ class TestPosts(Posts):
         name = generate_random_string(5)
         content = generate_random_string(12)
         status_code, body = self.post_post(name, content, self.auth_user)
+        self.v.validate(body)
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["name"] == name, GlobalErrorMessages.WRONG_BODY.value
         assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
-        validate(body, POST_SCHEMA)
 
     def test_get_post_user(self):
         """ Проверяем что  на запрос о получении данных о посте  пользователя найденого по id возвращается
@@ -49,9 +49,10 @@ class TestPosts(Posts):
 
         post_id = self.test_get_posts()
         status_code, body = self.get_post(post_id)
+        self.v.validate(body)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["id"] == int(post_id), GlobalErrorMessages.WRONG_BODY.value
-        validate(body, POST_SCHEMA)
+
     def test_put_post_user(self):
         """ Проверяем что  на запрос о обнавление данных в посте пользователя, найденого по id поста, возвращается
             статус кода 200 и в теле ответа содержатся данные о успешном обновлении поста"""
@@ -62,6 +63,7 @@ class TestPosts(Posts):
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["message"] == "updated", GlobalErrorMessages.WRONG_VALIDATION
+
     def test_delete_post_user(self):
         """ Проверяем что при отправке запроса на удаление поста найденного по id, возвращается статус кода 204"""
 

@@ -1,5 +1,5 @@
 from LISS_test_api_v2.sign_in import AddNewUser
-from generator.generator import generated_person
+from data.generator import generated_person
 from config import GlobalErrorMessages
 
 
@@ -25,8 +25,8 @@ class TestNewUser(AddNewUser):
         assert body["last_name"] == last_name, GlobalErrorMessages.WRONG_BODY.value
 
     def test_add_existin_name_user(self):
-        """ Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
-            с именем уже зарегестрированного пользователя, почта и пароль генерируются автоматически"""
+        """Тест содержит позитивный тестовый сценарий выполняя запрос на регистрацию пользователя
+           с валидными данными, которые сгенерированы автоматически"""
 
 
 

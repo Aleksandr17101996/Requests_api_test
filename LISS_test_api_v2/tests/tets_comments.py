@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 from LISS_test_api_v2.api_comments import Comments
 from config import Base, GlobalErrorMessages
 from LISS_test_api_v2.tests.test_posts import TestPosts
-from generator.generator import generate_random_string, generate_random_id
+from data.generator import generate_random_string, generate_random_id
 from jsonschema import validate
 from data.schemas.scgemas_v2 import COMMENT_SCHEMA, COMMENTS_SCHEMA
 

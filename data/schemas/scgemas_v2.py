@@ -4,36 +4,14 @@ POST_SCHEMA = {
         "id": {"type": "number"},
         "name": {"type": "string"},
         "content": {"type": "string"},
-        "author": {"type": "number"}
+        "author": {"type": "number"},
+        "publication_datetime": {"type": "string"}
     },
-    "required": ["id"]
-}
-
-POSTS_SCHEMA = {
-    "type": "array",
-    "properties": {
-        "id": {"type": "number"},
-        "title": {"type": "string"},
-        "name": {"type": "string"},
-        "author": {"type": "number"}
-    },
-    "required": ["id"]
+    "required": ["id", "name", "content", "author"]
 }
 
 COMMENT_SCHEMA = {
     "type": "object",
-    "properties": {
-        "id": {"type": "number"},
-        "title": {"type": "string"},
-        "content": {"type": "string"},
-        "author": {"type": "number"},
-        "post": {"type": "number"}
-    },
-    "required": ["id"]
-}
-
-COMMENTS_SCHEMA = {
-    "type": "array",
     "properties": {
         "id": {"type": "number"},
         "title": {"type": "string"},
