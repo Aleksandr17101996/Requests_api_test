@@ -6,7 +6,7 @@ from config import GlobalErrorMessages
 class TestNewUser(AddNewUser):
     def test_add_new_user(self):
         """Тест содержит позитивный тестовый сценарий выполняя запрос на регистрацию пользователя
-           с валидными данными, которые сгенерированы автоматически"""
+           с валидными данными, которые сгенерированы автоматически, возвращает id созданного пользователя"""
 
         person_info = next(generated_person())
         email = person_info.email
@@ -23,7 +23,7 @@ class TestNewUser(AddNewUser):
         assert body["first_name"] == first_name, GlobalErrorMessages.WRONG_BODY.value
         assert body["middle_name"] == middle_name, GlobalErrorMessages.WRONG_BODY.value
         assert body["last_name"] == last_name, GlobalErrorMessages.WRONG_BODY.value
-
+        return body["id"]
     def test_add_existin_name_user(self):
         """Тест содержит позитивный тестовый сценарий выполняя запрос на регистрацию пользователя
            с валидными данными, которые сгенерированы автоматически"""
