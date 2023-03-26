@@ -63,3 +63,14 @@ class TestNewUser(AddNewUser):
     def test_add_existin_email_user(self):
         """Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
            с почтой уже зарегестрированного пользователя"""
+
+        person_info = next(generated_person())
+        email = "Alexandr@mail.com"  # Данная почта уже зарегестрированна в системе.
+        password = person_info.password
+        name = person_info.user_name
+        first_name = None
+        middle_name = None
+        last_name = None
+        status_code, body = self.sign_in_new_user(name, email, str(password), first_name, middle_name, last_name, )
+        assert status_code == 409, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["message"] == "User with this username or email already exists", GlobalErrorMessages.WRONG_VALIDATION.value
