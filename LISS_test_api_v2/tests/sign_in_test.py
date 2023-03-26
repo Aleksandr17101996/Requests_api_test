@@ -36,7 +36,7 @@ class TestNewUser(AddNewUser):
         first_name = None
         middle_name = None
         last_name = None
-        status_code, body = self.sign_in_new_user(name, email, str(password), first_name, middle_name, last_name, )
+        status_code, body = self.sign_in_new_user(name, email, str(password), first_name, middle_name, last_name,)
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["username"] == name, GlobalErrorMessages.WRONG_BODY.value
         assert body["email"] == email, GlobalErrorMessages.WRONG_BODY.value
@@ -45,5 +45,21 @@ class TestNewUser(AddNewUser):
         assert body["middle_name"] == middle_name, GlobalErrorMessages.WRONG_BODY.value
         assert body["last_name"] == last_name, GlobalErrorMessages.WRONG_BODY.value
 
+    def test_add_existin_name_user(self):
+        """ Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
+            с именем уже зарегестрированного пользователя, почта и пароль генерируются автоматически"""
 
+        person_info = next(generated_person())
+        email = person_info.email
+        password = person_info.password
+        name = "Alexandr"  # Имя Alexandr уже зарегестрированно в системе
+        first_name = None
+        middle_name = None
+        last_name = None
+        status_code, body = self.sign_in_new_user(name, email, str(password), first_name, middle_name, last_name,)
+        assert status_code == 409, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert body["message"] == "User with this username or email already exists", GlobalErrorMessages.WRONG_VALIDATION.value
 
+    def test_add_existin_email_user(self):
+        """Тест содержит негативный тестовый сценарий выполняя запрос на регистрацию пользователя
+           с почтой уже зарегестрированного пользователя"""
