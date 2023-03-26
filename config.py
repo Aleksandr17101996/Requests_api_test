@@ -12,7 +12,7 @@ class Base:
     INCORRECT_PASSWORD = "012"
 
 
-class GlobalErrorMessages(Enum):
+class ErrorMessages(Enum):
     WRONG_STATUS_CODE = "Полученный статус код не равен ожидаемому"
     WRONG_QUANTITY = "Колличество записей в ответе не соответсвует ожидаемому"
     WRONG_BODY = "Содержимое в теле ответа не соответсвует ожидаемому"

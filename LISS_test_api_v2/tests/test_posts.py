@@ -1,6 +1,6 @@
 from LISS_test_api_v2.api_posts import Posts
 from requests.auth import HTTPBasicAuth
-from config import Base, GlobalErrorMessages
+from config import Base, ErrorMessages
 from data.generator import generate_random_string, generate_random_id
 from data.validator import ValidatePost
 
@@ -21,13 +21,13 @@ class TestPosts(Posts):
             self.test_post_posts_user()
             status_code, body = self.get_posts()
             self.vp.array_validation(body)
-            assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-            assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
+            assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
+            assert len(body) > 0, ErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
             self.vp.array_validation(body)
-            assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-            assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
+            assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
+            assert len(body) > 0, ErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
 
     def test_post_posts_user(self):
@@ -39,9 +39,9 @@ class TestPosts(Posts):
         content = generate_random_string(12)
         status_code, body = self.post_post(name, content, self.auth_user)
         self.vp.dict_validation(body)
-        assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["name"] == name, GlobalErrorMessages.WRONG_BODY.value
-        assert body["content"] == content, GlobalErrorMessages.WRONG_BODY.value
+        assert status_code == 201, ErrorMessages.WRONG_STATUS_CODE.value
+        assert body["name"] == name, ErrorMessages.WRONG_BODY.value
+        assert body["content"] == content, ErrorMessages.WRONG_BODY.value
 
     def test_get_post_user(self):
         """ Проверяем что  на запрос о получении данных о посте  пользователя найденого по id возвращается
@@ -50,8 +50,8 @@ class TestPosts(Posts):
         post_id = self.test_get_posts()
         status_code, body = self.get_post(post_id)
         self.vp.dict_validation(body)
-        assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["id"] == int(post_id), GlobalErrorMessages.WRONG_BODY.value
+        assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
+        assert body["id"] == int(post_id), ErrorMessages.WRONG_BODY.value
 
     def test_put_post_user(self):
         """ Проверяем что  на запрос о обнавление данных в посте пользователя, найденого по id поста, возвращается
@@ -61,16 +61,16 @@ class TestPosts(Posts):
         update_content = generate_random_string(10)
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
-        assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "updated", GlobalErrorMessages.WRONG_VALIDATION
+        assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
+        assert body["message"] == "updated", ErrorMessages.WRONG_VALIDATION
 
     def test_delete_post_user(self):
         """ Проверяем что при отправке запроса на удаление поста найденного по id, возвращается статус кода 204"""
 
         post_id = self.test_get_posts()
         status_code, headers = self.delete_post(post_id, self.auth_user)
-        assert status_code == 204, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
+        assert status_code == 204, ErrorMessages.WRONG_STATUS_CODE.value
+        assert headers["Content-Type"] == "application/json", ErrorMessages.WRONG_HEADERS.value
 
     def test_get_post_pagination(self):
         """ Проверяем что при отправке запроса на выдачу комментариев с выбранной страницы
@@ -78,7 +78,7 @@ class TestPosts(Posts):
 
         numbers_page = "2"
         status_code, body = self.get_post_pagination(numbers_page)
-        assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
 
     def test_put_post_admin(self):
         """ Проверяем возможность изменения поста пользователя в роли администратора """
@@ -87,16 +87,16 @@ class TestPosts(Posts):
         update_content = generate_random_string(10)
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_admin)
-        assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "updated", GlobalErrorMessages.WRONG_BODY.value
+        assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
+        assert body["message"] == "updated", ErrorMessages.WRONG_BODY.value
 
     def test_delete_post_admin(self):
         """Проверяем возможность удаление постов правами администратора """
 
         post_id = self.test_get_posts()
         status_code, headers = self.delete_post(post_id, self.auth_admin)
-        assert status_code == 204, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
+        assert status_code == 204, ErrorMessages.WRONG_STATUS_CODE.value
+        assert headers["Content-Type"] == "application/json", ErrorMessages.WRONG_HEADERS.value
 
     def test_post_posts_invalid_user(self):
         """ Проверяем что  при отправке запроса на сервер с авторизацией польователя с неверным паролем
@@ -105,8 +105,8 @@ class TestPosts(Posts):
         title = generate_random_string(4)
         content = generate_random_string(10)
         status_code, body = self.post_post(title, content, self.auth_user_incorrect_pass)
-        assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", GlobalErrorMessages.WRONG_BODY.value
+        assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE.value
+        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_BODY.value
 
     def test_put_post_invalid_user(self):
         """ Проверяем что запроса на сервер с авторизацией польователя с неверным паролем
@@ -116,8 +116,8 @@ class TestPosts(Posts):
         update_content = generate_random_string(10)
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user_incorrect_pass)
-        assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE
-        assert body["message"] == "Could not verify your login!", GlobalErrorMessages.WRONG_BODY.value
+        assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE
+        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_BODY.value
 
     def test_delete_post_invalid_user(self):
         """ Проверяем что при отправке запроса на удаление поста найденного по id,
@@ -125,8 +125,8 @@ class TestPosts(Posts):
 
         post_id = self.test_get_posts()
         status_code, headers = self.delete_post(post_id, self.auth_user_incorrect_pass)
-        assert status_code == 401, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
+        assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE.value
+        assert headers["Content-Type"] == "application/json", ErrorMessages.WRONG_HEADERS.value
 
     def test_put_non_existent_post(self):
         """ Проверяем что  на запрос о обнавление данных в несуществующем посте c авторизацией пользователя,
@@ -135,13 +135,13 @@ class TestPosts(Posts):
         update_title = generate_random_string(4)
         update_content = generate_random_string(10)
         status_code, body = self.put_post(generate_random_id(), update_title, update_content, self.auth_user)
-        assert status_code == 404, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Post not found", GlobalErrorMessages.WRONG_VALIDATION.value
+        assert status_code == 404, ErrorMessages.WRONG_STATUS_CODE.value
+        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATION.value
 
     def test_delete_non_existent_post(self):
         """ Проверяем что  на запрос о удалении несуществующего поста с авторизацией модератора
             возвращается статус кода 404"""
 
         status_code, headers = self.delete_post(generate_random_id(), self.auth_admin)
-        assert status_code == 404, GlobalErrorMessages.WRONG_STATUS_CODE.value
-        assert headers["Content-Type"] == "application/json", GlobalErrorMessages.WRONG_HEADERS.value
+        assert status_code == 404, ErrorMessages.WRONG_STATUS_CODE.value
+        assert headers["Content-Type"] == "application/json", ErrorMessages.WRONG_HEADERS.value
