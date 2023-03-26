@@ -4,13 +4,13 @@ from LISS_test_api_v2.api_comments import Comments
 from config import Base, GlobalErrorMessages
 from LISS_test_api_v2.tests.test_posts import TestPosts
 from data.generator import generate_random_string, generate_random_id
-from jsonschema import validate
-from data.schemas.scgemas_v2 import COMMENT_SCHEMA, COMMENTS_SCHEMA
+from data.validator import ValidateComment
 
 tp = TestPosts()
 
 
 class TestComments(Comments):
+    vc = ValidateComment()
     auth_user = HTTPBasicAuth(Base.USER_NAME, Base.USER_PASSWORD)
     auth_user_incorrect_pass = HTTPBasicAuth(Base.USER_EMAIL, Base.INCORRECT_PASSWORD)
     auth_admin = HTTPBasicAuth(Base.USER_NAME_ADMIN, Base.USER_PASSWORD_ADMIN)
@@ -25,12 +25,12 @@ class TestComments(Comments):
         if len(body) == 0:
             self.test_post_comments()
             status_code, body = self.get_comments()
-            validate(body, COMMENTS_SCHEMA)
+            self.vc.array_validation(body)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
         else:
-            validate(body, COMMENTS_SCHEMA)
+            self.vc.array_validation(body)
             assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
             assert len(body) > 0, GlobalErrorMessages.WRONG_QUANTITY.value
             return str(body[-1]['id'])
@@ -44,10 +44,10 @@ class TestComments(Comments):
         content = generate_random_string(12)
         post_id = self.post_id
         status_code, body = self.post_comment(title, content, post_id, self.auth_user)
+        self.vc.dict_validation(body)
         assert status_code == 201, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["title"] == title, GlobalErrorMessages.WRONG_BODY.value
         assert body["text"] == content, GlobalErrorMessages.WRONG_BODY.value
-        validate(body, COMMENT_SCHEMA)
 
     def test_get_comment(self):
         """ Проверяем что  на запрос о получении данных о комментарии найденого по id возвращается
@@ -55,9 +55,9 @@ class TestComments(Comments):
 
         comment_id = self.test_get_comments()
         status_code, body = self.get_comment(comment_id)
+        self.vc.dict_validation(body)
         assert status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
         assert body["id"] == int(comment_id), GlobalErrorMessages.WRONG_BODY.value
-        validate(body, COMMENT_SCHEMA)
 
     def test_put_comment(self):
         """ Проверяем что  на запрос о обнавление данных в комментарии, найденого по id поста, возвращается
@@ -158,6 +158,3 @@ class TestComments(Comments):
         comment_id = self.test_get_comments()
         status_code, headers = self.delete_comment(comment_id, self.auth_admin)
         assert status_code == 403, GlobalErrorMessages.WRONG_STATUS_CODE.value
-
-
-

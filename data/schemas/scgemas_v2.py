@@ -15,11 +15,11 @@ COMMENT_SCHEMA = {
     "properties": {
         "id": {"type": "number"},
         "title": {"type": "string"},
-        "content": {"type": "string"},
+        "text": {"type": "string"},
         "author": {"type": "number"},
         "post": {"type": "number"}
     },
-    "required": ["id"]
+    "required": ["id", "author", "post", "title", "text"]
 }
 
 
