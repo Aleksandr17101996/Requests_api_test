@@ -1,5 +1,5 @@
 from jsonschema import validate
-from data.schemas.scgemas_v2 import POST_SCHEMA, COMMENT_SCHEMA
+from data.schemas.schemas_v2 import POST_SCHEMA, COMMENT_SCHEMA, NEW_USER_SCHEMA
 
 
 class ValidatePost:
@@ -18,3 +18,9 @@ class ValidateComment:
 
     def dict_validation(self, response):
         validate(response, COMMENT_SCHEMA)
+
+
+class ValidateNewUser:
+
+    def user_validation(self, response):
+        validate(response, NEW_USER_SCHEMA)

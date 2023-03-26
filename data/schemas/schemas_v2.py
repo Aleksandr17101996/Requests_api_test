@@ -27,9 +27,12 @@ NEW_USER_SCHEMA = {
     "type": "object",
     "properties": {
         "id": {"type": "number"},
+        "last": {"type": "string"},
+        "midle": {"type": "string"},
+        "first": {"type": "string"},
         "username": {"type": "string"},
         "email": {"type": "string"},
         "password": {"type": "string"}
     },
-    "required": ["id"]
+    "required": ["id", "username", "email", "password"]
 }
