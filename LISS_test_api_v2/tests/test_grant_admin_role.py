@@ -11,7 +11,9 @@ class TestGrantUserAdminRole(GrantUserAdminRole):
     auth_admin = HTTPBasicAuth(Base.USER_NAME_ADMIN, Base.USER_PASSWORD_ADMIN)
 
     def test_grant_admin_role(self):
-        """Тест проверяет возможность предоставить пользователю права администратора"""
+        """Тест проверяет возможность предоставить пользователю права администратора
+           Отправляем запрос на выдачу прав модератора, передаем id пользователя которому необходимо
+           предоставить права"""
 
         status_code, body = self.put_admin_rights_user(self.user_id, self.auth_admin)
         assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
