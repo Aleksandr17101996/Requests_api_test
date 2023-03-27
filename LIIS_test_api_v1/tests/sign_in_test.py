@@ -56,4 +56,4 @@ class TestNewUser(NewUser):
         name = person_info.user_name
         status_code, body = self.sign_in_new_user(name, email, password)
         assert status_code == 422, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["password"][-1] == "Not a valid string.", ErrorMessages.WRONG_VALIDATION.value
+        assert body["password"][-1] == "Not a valid string.", ErrorMessages.WRONG_VALIDATE.value
