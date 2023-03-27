@@ -86,7 +86,7 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.posts_comment(title, content, generate_random_id(), self.auth_user)
         assert status_code == 404, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATE.value
 
     def test_post_comment_invalid_user(self):
         """ Проверяем что  при отправке запроса на сервер с авторизацией польователя имеющего неправильный пароль
@@ -98,7 +98,7 @@ class TestComments(Comments):
         post_id = self.post_id
         status_code, body = self.posts_comment(title, content, post_id, self.auth_user_incorrect_pass)
         assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATE.value
 
     def test_put_comment_invalid_user(self):
         """ Проверяем что  на запрос о обнавление данных в комментарии, найденого по id поста,
@@ -110,7 +110,7 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.put_comment(comment_id, title, content, self.auth_user_incorrect_pass)
         assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATE.value
 
     def test_delete_comment_invalid_user(self):
         """ Проверяем что при отправке запроса на удаление комментария найденного по id,
@@ -129,7 +129,7 @@ class TestComments(Comments):
         content = generate_random_string(12)
         status_code, body = self.put_comment(generate_random_id(), title, content, self.auth_user)
         assert status_code == 404, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Comment not found", ErrorMessages.WRONG_VALIDATION
+        assert body["message"] == "Comment not found", ErrorMessages.WRONG_VALIDATE.value
 
     def test_delete_non_existent_comment(self):
         """ Проверяем что при отправке запроса на удаление несуществующего комментария
