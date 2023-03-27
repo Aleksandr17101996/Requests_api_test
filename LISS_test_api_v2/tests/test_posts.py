@@ -62,7 +62,7 @@ class TestPosts(Posts):
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user)
         assert status_code == 200, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "updated", ErrorMessages.WRONG_VALIDATION
+        assert body["message"] == "updated", ErrorMessages.WRONG_VALIDATE
 
     def test_delete_post_user(self):
         """ Проверяем что при отправке запроса на удаление поста найденного по id, возвращается статус кода 204"""
@@ -136,7 +136,7 @@ class TestPosts(Posts):
         update_content = generate_random_string(10)
         status_code, body = self.put_post(generate_random_id(), update_title, update_content, self.auth_user)
         assert status_code == 404, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATE.value
 
     def test_delete_non_existent_post(self):
         """ Проверяем что  на запрос о удалении несуществующего поста с авторизацией модератора
