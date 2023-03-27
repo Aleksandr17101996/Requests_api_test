@@ -79,7 +79,7 @@ class TestPosts(Posts):
         content = generate_random_string(10)
         status_code, body = self.post_posts(title, content, self.auth_user_incorrect_pass)
         assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATE.value
 
     def test_put_post_invalid_user(self):
         """ Проверяем что запроса на сервер с авторизацией польователя с неверным паролем
@@ -90,7 +90,7 @@ class TestPosts(Posts):
         post_id = self.test_get_posts()
         status_code, body = self.put_post(post_id, update_title, update_content, self.auth_user_incorrect_pass)
         assert status_code == 401, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Could not verify your login!", ErrorMessages.WRONG_VALIDATE.value
 
     def test_delete_post_invalid_user(self):
         """ Проверяем что при отправке запроса на удаление поста найденного по id,
@@ -107,7 +107,7 @@ class TestPosts(Posts):
         update_content = generate_random_string(10)
         status_code, body = self.put_post(generate_random_id(), update_title, update_content, self.auth_user)
         assert status_code == 404, ErrorMessages.WRONG_STATUS_CODE.value
-        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATION.value
+        assert body["message"] == "Post not found", ErrorMessages.WRONG_VALIDATE.value
 
     def test_delete_non_existent_post(self):
         """ Проверяем что  на запрос о удалении несуществующего поста,
