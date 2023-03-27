@@ -1,8 +1,8 @@
 from requests.auth import HTTPBasicAuth
 
-from LISS_test_api_v2.api_comments import Comments
+from LIIS_test_api_v2.api_comments import Comments
 from config import Base, ErrorMessages
-from LISS_test_api_v2.tests.test_posts import TestPosts
+from LIIS_test_api_v2.tests.test_posts import TestPosts
 from data.generator import generate_random_string, generate_random_id
 from data.validator import ValidateComment
 

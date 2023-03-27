@@ -1,4 +1,4 @@
-from LISS_test_api_v2.sign_in import AddNewUser
+from LIIS_test_api_v2.sign_in import AddNewUser
 from data.generator import generated_person
 from config import ErrorMessages
 from data.validator import ValidateNewUser

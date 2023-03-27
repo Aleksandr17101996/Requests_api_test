@@ -1,4 +1,4 @@
-from LISS_test_api_v2.api_posts import Posts
+from LIIS_test_api_v2.api_posts import Posts
 from requests.auth import HTTPBasicAuth
 from config import Base, ErrorMessages
 from data.generator import generate_random_string, generate_random_id

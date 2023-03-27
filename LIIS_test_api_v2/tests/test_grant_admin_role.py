@@ -1,5 +1,5 @@
-from LISS_test_api_v2.grant_user_admin_role import GrantUserAdminRole
-from LISS_test_api_v2.tests.sign_in_test import TestNewUser
+from LIIS_test_api_v2.grant_user_admin_role import GrantUserAdminRole
+from LIIS_test_api_v2.tests.sign_in_test import TestNewUser
 from requests.auth import HTTPBasicAuth
 from config import Base, ErrorMessages
 
